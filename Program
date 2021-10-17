@@ -1,0 +1,47 @@
+CREATE TABLE Publishers(pub_id int, pub_name text, pub_country text, pub_date_of_signup text, Pub_account_manager text);
+INSERT  into Publishers values(1,"King","US","01.08.2014", "Moshe");
+INSERT  into Publishers values(2,"Jam City","GB","20.09.2010","Alon");
+INSERT  into Publishers values(3,"EA","US","24.10.2020","Yossi");
+
+CREATE TABLE applications(app_id int, app_name text, app_pub_id int, App_platform int);
+INSERT into applications values(2034,"Candy Crush", 1,1);
+INSERT into applications values(2035,"Candy Crush", 1,2);
+INSERT into applications values(4325,"Cookie Jam",2,1);
+INSERT into applications values(3415,"FIFA Soccer",3,2);
+
+create table Application_statistics(App_id int, dateTime date, Impressions int, Clicks int, Country text);
+INSERT  into Application_statistics values(2034,"2021-09-16",4,3,"US");
+INSERT  into Application_statistics values(2035,"2012-08-10",6,5,"GB");
+INSERT  into Application_statistics values(4325,"2021-09-15",7,0,"IN");
+INSERT  into Application_statistics values(3415,"2021-08-11",3,1,"CN");
+
+-- Answer 1 
+UPDATE applications
+SET App_platform = 'Android'
+WHERE App_platform=1;
+
+UPDATE applications
+SET App_platform = 'IOS'
+WHERE App_platform=2;
+
+SELECT applications.app_id, applications.app_name, Publishers.pub_name, applications.App_platform
+FROM applications
+JOIN Publishers ON applications.app_pub_id=Publishers.pub_id;
+
+-- Answer 2 
+SELECT Country, Impressions, Clicks
+FROM Application_statistics
+WHERE dateTime > now() - INTERVAL 7 day
+ORDER BY dateTime DESC;
+
+
+-- Answer 3 
+SELECT Publishers.pub_name,Application_statistics.Impressions, Application_statistics.Clicks
+FROM Application_statistics
+JOIN applications
+ON Application_statistics.App_id = applications.app_id
+JOIN Publishers
+ON applications.app_pub_id = Publishers.pub_id
+WHERE dateTime > now() - INTERVAL 7 day
+ORDER BY dateTime DESC;
+
